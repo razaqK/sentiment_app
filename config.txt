@@ -1,0 +1,4 @@
+To use this app your have to become facebook developer and then create your application with desire name. Then obtain your APP_ID and APP_SECRET.
+e.g
+APP_SECRET = "your app secret goes here"
+APP_ID = "your app id goes here"
