@@ -69,8 +69,8 @@ class PullData:
             return comment_data
 
     def main(self):
-        APP_SECRET = "bc5698075f791582c6e5fb9dbc0f144b"
-        APP_ID = "2040068469550624"
+        APP_SECRET = ""
+        APP_ID = ""
 
         list_companies = ["walmart"]
         graph_url = "https://graph.facebook.com/"
@@ -93,4 +93,4 @@ class PullData:
 
 if __name__ == "__main__":
     pulldata = PullData()
-    pulldata.main()
+    pulldata.main()6
