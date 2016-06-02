@@ -88,10 +88,15 @@ class PullData:
         return data
 
     def main(self):
+<<<<<<< HEAD
         get_credentials = self.read_config()
         APP_SECRET = get_credentials[0]
         APP_ID = get_credentials[1]
         inp = input("Enter Company Name").replace(" ","").lower().split()
+=======
+        APP_SECRET = ""
+        APP_ID = ""
+>>>>>>> f6f749c683e3da6cb933b8da9dcbf30790199038
 
         list_companies = inp
         graph_url = "https://graph.facebook.com/"
@@ -115,4 +120,4 @@ class PullData:
 
 if __name__ == "__main__":
     pulldata = PullData()
-    pulldata.main()
+    pulldata.main()6
