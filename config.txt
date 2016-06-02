@@ -1,2 +1,0 @@
-APP_SECRET = "your APP_SECRET goes here"
-APP_ID = "your APP_ID goes here"
