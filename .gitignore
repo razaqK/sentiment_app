@@ -1,0 +1,21 @@
+# pycharm project files
+.idea
+/controller
+/models
+/utils
+
+# config file
+config.txt
+
+# windows thumbnail cache
+Thumbs.db
+
+# composer vendor dir
+/vendor
+
+# composer itself is not needed
+composer.phar
+
+# Mac DS_Store Files
+.DS_Store
+

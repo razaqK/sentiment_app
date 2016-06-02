@@ -68,11 +68,32 @@ class PullData:
         else:
             return comment_data
 
-    def main(self):
-        APP_SECRET = "bc5698075f791582c6e5fb9dbc0f144b"
-        APP_ID = "2040068469550624"
+    def read_config(self):
+        featurewords = []
+        filename = 'config.txt'
+        filecontent = open(filename, 'r')
+        data = filecontent.readlines()
 
-        list_companies = ["walmart"]
+        #data = data.split('=')
+        for word in data:
+            tag = word.split('=')
+            tag.pop(0)
+            featurewords.append(tag[0].strip())
+        return featurewords
+
+    def read_company(self):
+        filename = 'listofcompanies.txt'
+        filecontent = open(filename, 'r')
+        data = filecontent.readlines()
+        return data
+
+    def main(self):
+        get_credentials = self.read_config()
+        APP_SECRET = get_credentials[0]
+        APP_ID = get_credentials[1]
+        inp = input("Enter Company Name").replace(" ","").lower().split()
+
+        list_companies = inp
         graph_url = "https://graph.facebook.com/"
 
         last_crawl = datetime.datetime.now() - datetime.timedelta(days=3)
@@ -81,15 +102,16 @@ class PullData:
         for company in list_companies:
             current_page_post = graph_url + company
             post_url = self.create_url(current_page_post, APP_ID, APP_SECRET)
+            print(post_url)
             post_data = []
             post_data = self.scrape_posts_by_date(post_url, last_crawl, post_data, APP_ID, APP_SECRET)
-            #print(post_data)
+            print(post_data)
 
             comment_data = []
             for post in post_data:
                 comment_url = self.create_comments_url(graph_url, post[0], APP_ID, APP_SECRET)
                 comments = self.get_comments_data(comment_url, comment_data, post[0])
-                #print(comments)
+                print(comments)
 
 if __name__ == "__main__":
     pulldata = PullData()
