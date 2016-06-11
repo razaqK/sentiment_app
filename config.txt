@@ -1,2 +1,2 @@
-APP_SECRET = bc5698075f791582c6e5fb9dbc0f144b
-APP_ID = 2040068469550624
+APP_SECRET = "your app secret goes here"
+APP_ID = "your app id goes here"
