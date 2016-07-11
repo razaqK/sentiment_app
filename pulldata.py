@@ -2,7 +2,7 @@ import json, pymysql, requests, datetime
 
 class Config:
 
-    CONFIG_FILE = 'config.txt'
+    CONFIG_FILE = 'configuration.txt'
     COMPANY_FILE = 'listofcompanies.txt'
     SPLITTER = '='
 
@@ -48,36 +48,30 @@ class PullData:
 
     #obtaining data from post url
     def scrape_posts_by_date(self,graph_url, date, post_data, APP_ID, APP_SECRET):
-        try:
-            page_posts, status = self.render_url_to_json(graph_url)
-            print(page_posts)
-            if(page_posts is not False):
-                next_page = page_posts["paging"]["next"]
-                page_posts = page_posts["data"]
-                collecting = True
+        page_posts, status = self.render_url_to_json(graph_url)
+        if(page_posts is not False):
+            next_page = page_posts["paging"]["next"]
+            page_posts = page_posts["data"]
+            collecting = True
 
-                for post in page_posts:
-                    try:
-                        current_post = [post["id"], post["message"],
-                                             post["created_time"]]
-                    except Exception:
-                        current_post = [ "error", "error", "error", "error"]
+            for post in page_posts:
+                try:
+                    current_post = [post["id"], post["message"], post["created_time"]]
+                except Exception:
+                    current_post = [ "error", "error", "error", "error"]
 
-                    if current_post[2] != "error":
-                        print(date)
-                        print(current_post[2])
-                        if date <= current_post[2]:
-                            post_data.append(current_post)
-                        elif date > current_post[2]:
-                            print("Done collecting")
-                            collecting = False
-                            break
+                if current_post[2] != "error":
+                    if date <= current_post[2]:
+                        post_data.append(current_post)
+                    elif date > current_post[2]:
+                        print("Done collecting")
+                        collecting = False
+                        break
 
-                if collecting == True:
-                    self.scrape_posts_by_date(next_page, date, post_data, APP_ID, APP_SECRET)
-                return post_data, True
-        except Exception as error:
-            return error, False
+            if collecting == True:
+                self.scrape_posts_by_date(next_page, date, post_data, APP_ID, APP_SECRET)
+            return post_data, True
+
 
     #create Graph API Call
     def create_comments_url(self, graph_url, post_id, APP_ID, APP_SECRET):
