@@ -21,8 +21,7 @@ class Config:
         data = self.read_data(self.CONFIG_FILE)
         for word in data:
             tag = word.split(self.SPLITTER)
-            tag.pop(0)
-            featurewords.append(tag[0].strip())
+            featurewords.append(tag[1].strip())
         return featurewords
 
     def read_company(self):
@@ -39,21 +38,21 @@ class PullData:
         return post_url
 
     #convert url page to json
-    def render_url_to_json(self,graph_url):
+    def render_url_to_json(self, graph_url):
         try:
             json_data = requests.get(graph_url).json()
-            return json_data, True
+            return json_data
         except Exception as error:
-            return error, False
+            return error
 
     #obtaining data from post url
-    def scrape_posts_by_date(self,graph_url, date, post_data, APP_ID, APP_SECRET):
-        page_posts, status = self.render_url_to_json(graph_url)
+    def scrape_posts_by_date(self, graph_url, date, post_data, APP_ID, APP_SECRET):
+        page_posts = self.render_url_to_json(graph_url)
+
         if(page_posts is not False):
             next_page = page_posts["paging"]["next"]
             page_posts = page_posts["data"]
             collecting = True
-
             for post in page_posts:
                 try:
                     current_post = [post["id"], post["message"], post["created_time"]]
@@ -67,10 +66,9 @@ class PullData:
                         print("Done collecting")
                         collecting = False
                         break
-
             if collecting == True:
                 self.scrape_posts_by_date(next_page, date, post_data, APP_ID, APP_SECRET)
-            return post_data, True
+            return post_data
 
 
     #create Graph API Call
@@ -81,24 +79,25 @@ class PullData:
 
     #obtaining comment for each post
     def get_comments_data(self,comments_url, comment_data, post_id):
-        comments, status = self.render_url_to_json(comments_url)["data"]
+        comments = self.render_url_to_json(comments_url)["data"]
+        if len(comments)>0:
+            print(comments)
+            for comment in comments:
+                try:
+                    current_comments = [comment["id"], comment["message"],comment["created_time"], post_id]
+                    comment_data.append(current_comments)
+                except Exception:
+                    current_comments = ["error", "error", "error", "error", "error"]
 
-        for comment in comments:
             try:
-                current_comments = [comment["id"], comment["message"],comment["created_time"], post_id]
-                comment_data.append(current_comments)
+                next_page = comments["paging"]["next"]
             except Exception:
-                current_comments = ["error", "error", "error", "error", "error"]
+                next_page = None
 
-        try:
-            next_page = comments["paging"]["next"]
-        except Exception:
-            next_page = None
-
-        if next_page is not None:
-            self.get_comments_data(next_page, comment_data, post_id)
-        else:
-            return comment_data
+            if next_page is not None:
+                self.get_comments_data(next_page, comment_data, post_id)
+            else:
+                return comment_data
 
     def write_file(self, data_file, data):
         with open(data_file, 'a') as file:
@@ -110,10 +109,10 @@ class PullData:
             credentials = Config()
             APP_SECRET = credentials.secret
             APP_ID = credentials.id
-            input_company_name = input("Enter Company Name").replace(" ","").lower().split()
+            input_company_name = input("Enter Company Name").replace(" ", "").lower().split()
             list_companies = input_company_name
 
-            last_crawl = datetime.datetime.now() - datetime.timedelta(days=3)
+            last_crawl = datetime.datetime.now() - datetime.timedelta(days=18)
             last_crawl = last_crawl.isoformat()
 
             for company in list_companies:
@@ -122,17 +121,18 @@ class PullData:
                 current_page_post = self.GRAPH_URL + company
                 post_url = self.create_url(current_page_post, APP_ID, APP_SECRET)
                 post_data = []
-                post_data, status = self.scrape_posts_by_date(post_url, last_crawl, post_data, APP_ID, APP_SECRET)
-                print(post_data)
+                post_data = self.scrape_posts_by_date(post_url, last_crawl, post_data, APP_ID, APP_SECRET)
                 self.write_file(post_data_file, json.dumps(post_data))
                 comment_data = []
+                count = 0
                 for post in post_data:
+                    count +=1
                     comment_url = self.create_comments_url(self.GRAPH_URL, post[0], APP_ID, APP_SECRET)
                     comments = self.get_comments_data(comment_url, comment_data, post[0])
                     self.write_file(comments_data_file, json.dumps(comments))
             return True
         except Exception as error:
-            return False
+            return error
 
 if __name__ == "__main__":
     pulldata = PullData()
