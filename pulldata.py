@@ -124,8 +124,13 @@ class PullData:
                 post_data = self.scrape_posts_by_date(post_url, last_crawl, post_data, APP_ID, APP_SECRET)
                 self.write_file(post_data_file, json.dumps(post_data))
                 comment_data = []
+<<<<<<< HEAD
 
+=======
+                count = 0
+>>>>>>> 51fde6159e2f1a14f3a619f1e69e3d56a897ca1c
                 for post in post_data:
+                    count +=1
                     comment_url = self.create_comments_url(self.GRAPH_URL, post[0], APP_ID, APP_SECRET)
                     comments = self.get_comments_data(comment_url, comment_data, post[0])
                     self.write_file(comments_data_file, json.dumps(comments))
