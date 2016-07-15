@@ -1,0 +1,2 @@
+APP_SECRET = application history
+APP_ID = application id
