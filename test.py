@@ -2,7 +2,7 @@ import unittest
 
 import datetime
 
-import pulldata
+from src import pulldata
 class DataTest(unittest.TestCase):
     def setUp(self):
         self.data_pull = pulldata.PullData()

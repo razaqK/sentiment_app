@@ -1,4 +1,4 @@
-import json, pymysql, requests, datetime
+import json, requests, datetime
 
 class Config:
 
@@ -30,12 +30,15 @@ class Config:
 class PullData:
 
     GRAPH_URL = 'https://graph.facebook.com/'
+    URL_PARAM = "?key=value&access_token="
     POST_DATA_DIR = 'data/postdata/'
     COMMENT_DATA_DIR = 'data/commentdata/comments_'
+    JOINER = '|'
+    TXT_EXT = '.txt'
 
     #return post url
     def create_url(self, graph_url, APP_ID, APP_SECRET):
-        post_args = "/posts/?key=value&access_token=" + APP_ID + "|" + APP_SECRET
+        post_args = "/posts/" + self.URL_PARAM + APP_ID + self.JOINER + APP_SECRET
         post_url = graph_url + post_args
         return post_url
 
@@ -75,15 +78,17 @@ class PullData:
 
     #create Graph API Call
     def create_comments_url(self, graph_url, post_id, APP_ID, APP_SECRET):
-        comments_args = post_id + "/comments/?key=value&access_token=" + APP_ID + "|" + APP_SECRET
+        comments_args = post_id + "/comments/" + self.URL_PARAM + APP_ID + self.JOINER + APP_SECRET
         comments_url = graph_url + comments_args
         return comments_url
 
     #obtaining comment for each post
-    def get_comments_data(self,comments_url, comment_data, post_id):
+    def get_comments_data(self, comments_url, comment_data, post_id):
+        print(comments_url)
         comments = self.render_url_to_json(comments_url)["data"]
+        print(comments)
         if len(comments)>0:
-            #print(comments)
+
             for comment in comments:
                 try:
                     current_comments = [comment["id"], comment["message"],comment["created_time"], post_id]
@@ -117,10 +122,8 @@ class PullData:
         last_crawl = last_crawl.isoformat()
 
         for company in list_companies:
-            post_data_file = self.POST_DATA_DIR+"p"+company+".txt"
-            comments_data_file = self.COMMENT_DATA_DIR+"p"+company+".txt"
-            print(post_data_file)
-            print(comments_data_file)
+            post_data_file = self.POST_DATA_DIR+company+self.TXT_EXT
+            comments_data_file = self.COMMENT_DATA_DIR+company+self.TXT_EXT
             current_page_post = self.GRAPH_URL + company
             post_url = self.create_url(current_page_post, APP_ID, APP_SECRET)
             post_data = []
@@ -130,10 +133,5 @@ class PullData:
             for post in post_data:
                 comment_url = self.create_comments_url(self.GRAPH_URL, post[0], APP_ID, APP_SECRET)
                 comments = self.get_comments_data(comment_url, comment_data, post[0])
+                print(comments)
                 self.write_file(comments_data_file, json.dumps(comments))
-        
-        
-
-##if __name__ == "__main__":
-##    pulldata = PullData()
-##    pulldata.main()
