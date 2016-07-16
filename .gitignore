@@ -2,11 +2,12 @@
 .idea
 /controller
 /models
-/utils
 
 # config file
 configuration.txt
 /configiguration.txt
+/data/config/configuration.txt
+data/config/configuration.txt
 
 # windows thumbnail cache
 Thumbs.db

@@ -2,8 +2,8 @@ import json, pymysql, requests, datetime
 
 class Config:
 
-    CONFIG_FILE = 'configuration.txt'
-    COMPANY_FILE = 'listofcompanies.txt'
+    CONFIG_FILE = 'data/config/configuration.txt'
+    COMPANY_FILE = 'data/listofcompanies.txt'
     SPLITTER = '='
 
     def __init__(self):
@@ -30,6 +30,8 @@ class Config:
 class PullData:
 
     GRAPH_URL = 'https://graph.facebook.com/'
+    POST_DATA_DIR = 'data/postdata/'
+    COMMENT_DATA_DIR = 'data/commentdata/comments_'
 
     #return post url
     def create_url(self, graph_url, APP_ID, APP_SECRET):
@@ -105,33 +107,33 @@ class PullData:
             file.close()
 
     def main(self):
-        try:
-            credentials = Config()
-            APP_SECRET = credentials.secret
-            APP_ID = credentials.id
-            input_company_name = input("Enter Company Name").replace(" ", "").lower().split()
-            list_companies = input_company_name
+        credentials = Config()
+        APP_SECRET = credentials.secret
+        APP_ID = credentials.id
+        input_company_name = input("Enter Company Name").replace(" ", "").lower().split()
+        list_companies = input_company_name
 
-            last_crawl = datetime.datetime.now() - datetime.timedelta(days=18)
-            last_crawl = last_crawl.isoformat()
+        last_crawl = datetime.datetime.now() - datetime.timedelta(days=18)
+        last_crawl = last_crawl.isoformat()
 
-            for company in list_companies:
-                post_data_file = company+".txt"
-                comments_data_file = "comments_"+company+".txt"
-                current_page_post = self.GRAPH_URL + company
-                post_url = self.create_url(current_page_post, APP_ID, APP_SECRET)
-                post_data = []
-                post_data = self.scrape_posts_by_date(post_url, last_crawl, post_data, APP_ID, APP_SECRET)
-                self.write_file(post_data_file, json.dumps(post_data))
-                comment_data = []
-                for post in post_data:
-                    comment_url = self.create_comments_url(self.GRAPH_URL, post[0], APP_ID, APP_SECRET)
-                    comments = self.get_comments_data(comment_url, comment_data, post[0])
-                    self.write_file(comments_data_file, json.dumps(comments))
-            return True
-        except Exception as error:
-            return error
+        for company in list_companies:
+            post_data_file = self.POST_DATA_DIR+"p"+company+".txt"
+            comments_data_file = self.COMMENT_DATA_DIR+"p"+company+".txt"
+            print(post_data_file)
+            print(comments_data_file)
+            current_page_post = self.GRAPH_URL + company
+            post_url = self.create_url(current_page_post, APP_ID, APP_SECRET)
+            post_data = []
+            post_data = self.scrape_posts_by_date(post_url, last_crawl, post_data, APP_ID, APP_SECRET)
+            self.write_file(post_data_file, json.dumps(post_data))
+            comment_data = []
+            for post in post_data:
+                comment_url = self.create_comments_url(self.GRAPH_URL, post[0], APP_ID, APP_SECRET)
+                comments = self.get_comments_data(comment_url, comment_data, post[0])
+                self.write_file(comments_data_file, json.dumps(comments))
+        
+        
 
-if __name__ == "__main__":
-    pulldata = PullData()
-    pulldata.main()
+##if __name__ == "__main__":
+##    pulldata = PullData()
+##    pulldata.main()
