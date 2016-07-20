@@ -1,9 +1,10 @@
-import json, requests, datetime
+import json, requests, datetime, os
 
+scriptpath = os.path.dirname(__file__)
 class Config:
 
-    CONFIG_FILE = 'data/config/configuration.txt'
-    COMPANY_FILE = 'data/listofcompanies.txt'
+    CONFIG_FILE = os.path.join(scriptpath, '..\data\config\configuration.txt')
+    COMPANY_FILE = os.path.join(scriptpath, '..\data\listofcompanies.txt')
     SPLITTER = '='
 
     def __init__(self):

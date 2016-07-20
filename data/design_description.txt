@@ -1,0 +1,22 @@
+Storing Data Gathered About Companies:
+    Database to be use is mongodb
+    There will be two tables, namely:
+    1. Post_Data Table
+    2. Comment_Data Table
+
+    Fields in the table is define below
+
+    Post Data Table:
+        fields-             data-type
+        id:                    int
+        messages:              string
+        created_time:          datetime
+
+    Comment Data Table:
+        id:                     int
+        messages:               string
+        created_time:           datetime
+        post_id:                string
+
+
+
