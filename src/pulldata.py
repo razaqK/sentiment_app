@@ -112,6 +112,16 @@ class PullData:
             file.writelines(data)
             file.close()
 
+    def get_db(self):
+        from pymongo import MongoClient
+        client = MongoClient('mongodb://localhost:27017')
+        db = client.sentimental
+        return db
+
+    """def add_data(self, db, data):
+        for i in data:
+            db.sentiment.insert({"name": i})"""
+
     def main(self):
         credentials = Config()
         APP_SECRET = credentials.secret
