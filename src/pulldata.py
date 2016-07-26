@@ -36,6 +36,7 @@ class PullData:
     COMMENT_DATA_DIR = 'data/commentdata/comments_'
     JOINER = '|'
     TXT_EXT = '.txt'
+    URI_MONGO = 'mongodb://localhost:27017'
 
     #return post url
     def create_url(self, graph_url, APP_ID, APP_SECRET):
@@ -114,13 +115,13 @@ class PullData:
 
     def get_db(self):
         from pymongo import MongoClient
-        client = MongoClient('mongodb://localhost:27017')
-        db = client.sentimental
+        client = MongoClient(self.URI_MONGO)
+        db = client.sentiment
         return db
 
-    """def add_data(self, db, data):
+    def add_data(self, db, data, name):
         for i in data:
-            db.sentiment.insert({"name": i})"""
+            db.sentiment.insert({name: i})
 
     def main(self):
         credentials = Config()
@@ -139,10 +140,14 @@ class PullData:
             post_url = self.create_url(current_page_post, APP_ID, APP_SECRET)
             post_data = []
             post_data = self.scrape_posts_by_date(post_url, last_crawl, post_data, APP_ID, APP_SECRET)
+            db = self.get_db()
+            self.add_data(db, post_data, "post")
             self.write_file(post_data_file, json.dumps(post_data))
             comment_data = []
             for post in post_data:
                 comment_url = self.create_comments_url(self.GRAPH_URL, post[0], APP_ID, APP_SECRET)
                 comments = self.get_comments_data(comment_url, comment_data, post[0])
+                db = self.get_db()
+                self.add_data(db, comments, "comment")
                 print(comments)
                 self.write_file(comments_data_file, json.dumps(comments))
