@@ -32,4 +32,6 @@ class TextClassifier:
     def train_feature_words(self):
         cl = NaiveBayesClassifier(self._TRAIN_DATA)
         blob = TextBlob("The beer is good. But the bad hangover.", classifier=cl)
-        pass
+        for s in blob.sentences:
+            print(s)
+            print(s.classify())
