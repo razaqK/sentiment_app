@@ -23,6 +23,8 @@ class TextClassifier:
         ('Gary is a friend of mine.', 'pos'),
         ("I can't believe I'm doing this.", 'neg')]
 
+    cl = NaiveBayesClassifier(_TRAIN_DATA)
+
     def feature_words(self):
         pass
 
@@ -30,8 +32,16 @@ class TextClassifier:
         pass
 
     def train_feature_words(self):
-        cl = NaiveBayesClassifier(self._TRAIN_DATA)
-        blob = TextBlob("The beer is good. But the bad hangover.", classifier=cl)
+        blob = TextBlob("The beer is good. But the bad hangover.", classifier=self.cl)
         for s in blob.sentences:
             print(s)
             print(s.classify())
+
+    def update_train_data(self, data):
+        self.cl.update(data)
+
+    def check_sent_accuracy(self):
+        self.cl.accuracy(self.TEST_DATA)
+
+    def clasiffy_sent(self):
+        self.cl.classify("He ain't from around here.!")
