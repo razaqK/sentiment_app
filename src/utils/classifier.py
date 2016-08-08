@@ -31,8 +31,8 @@ class TextClassifier:
     def extract_feature_words(self):
         pass
 
-    def train_feature_words(self):
-        blob = TextBlob("The beer is good. But the bad hangover.", classifier=self.cl)
+    def train_feature_words(self, features):
+        blob = TextBlob(features, classifier=self.cl)
         for s in blob.sentences:
             print(s)
             print(s.classify())
@@ -43,5 +43,5 @@ class TextClassifier:
     def check_sent_accuracy(self):
         self.cl.accuracy(self.TEST_DATA)
 
-    def clasiffy_sent(self):
-        self.cl.classify("He ain't from around here.!")
+    def clasiffy_sent(self, sentence):
+        self.cl.classify(sentence)
