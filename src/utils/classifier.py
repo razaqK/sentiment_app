@@ -1,5 +1,6 @@
 from textblob.classifiers import NaiveBayesClassifier
 from textblob import TextBlob
+import json
 from textblob.sentiments import *
 
 class TextClassifier:
@@ -45,3 +46,8 @@ class TextClassifier:
 
     def clasiffy_sent(self, sentence):
         self.cl.classify(sentence)
+
+    def sentiment(self, message):
+        text = TextBlob(message)
+        response = {'polarity': text.polarity, 'subjectivity': text.subjectivity}
+        return json(response)
