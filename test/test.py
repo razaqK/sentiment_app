@@ -7,6 +7,7 @@ if parent_path not in sys.path:
     sys.path.insert(0, parent_path)
 
 from src import pulldata
+from src import utils.classifier as classify
 class DataTest(unittest.TestCase):
     def setUp(self):
         self.data_pull = pulldata.PullData()

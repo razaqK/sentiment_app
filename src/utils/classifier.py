@@ -26,6 +26,9 @@ class TextClassifier:
 
     cl = NaiveBayesClassifier(_TRAIN_DATA)
 
+    def load_words_in_list(self, filename):
+        pass
+
     def feature_words(self):
         pass
 
