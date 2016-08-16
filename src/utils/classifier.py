@@ -26,6 +26,7 @@ class TextClassifier:
 
     cl = NaiveBayesClassifier(_TRAIN_DATA)
 
+
     def load_words_in_list(self, filename):
         pass
 
@@ -50,6 +51,14 @@ class TextClassifier:
     def clasiffy_sent(self, sentence):
         self.cl.classify(sentence)
 
+    def check_sent(self):
+        print(self.cl.classify("He ain't from around here.!"))
+
+        prob_dist = self.cl.prob_classify("This one's a doozy.")
+        prob_dist.max()
+        round(prob_dist.prob("pos"), 2)
+        round(prob_dist.prob("neg"), 2)
+        
     def sentiment(self, message):
         text = TextBlob(message)
         response = {'polarity': text.polarity, 'subjectivity': text.subjectivity}
