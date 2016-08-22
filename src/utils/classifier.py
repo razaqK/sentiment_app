@@ -25,7 +25,36 @@ class TextClassifier:
                  ('Gary is a friend of mine.', 'pos'),
                  ("I can't believe I'm doing this.", 'neg')]
 
-    cl = NaiveBayesClassifier(_TRAIN_DATA)
+    _CL = NaiveBayesClassifier(_TRAIN_DATA)
+
+    response = {}
+    info = []
+    _LABEL = "company"
+    _KEY_STMT = "sentence"
+    _KEY_SENT = "sentiment"
+    _KEY_HIGH_SENT = "sentiment_max"
+    _KEY_POS_SENT = "sentiment_pos"
+    _KEY_NEG_SENT = "sentiment_neg"
+
+    def check_test_data_accuracy(self):
+
+        print(self._CL.accuracy(self.TEST_DATA))
+
+    def trainer_sentiment(self, sentence):
+        features = TextBlob(sentence, classifier=self._CL)
+
+        for stmt in features.sentences:
+            prob_dist = self._CL.prob_classify(stmt)
+            self.response.update({self._LABEL:"walmart",self._KEY_STMT:stmt, self._KEY_SENT:stmt.classify(), self._KEY_HIGH_SENT:prob_dist.max(), self._KEY_POS_SENT:round(prob_dist.prob("pos"), 2), self._KEY_NEG_SENT:round(prob_dist.prob("neg"), 2)})
+            """self.response[self._KEY_STMT] = stmt
+            self.response[self._KEY_SENT] = stmt.classify()
+            self.response[self._KEY_HIGH_SENT] = prob_dist.max()
+            self.response[self._KEY_POS_SENT] = round(prob_dist.prob("pos"), 2)
+            self.response[self._KEY_NEG_SENT] = round(prob_dist.prob("neg"), 2)"""
+            self.info.append(self.response)
+
+        return self.info
+
 
     def load_words_list(self, filename):
         pass
@@ -62,3 +91,6 @@ class TextClassifier:
         text = TextBlob(message)
         response = {'polarity': text.polarity, 'subjectivity': text.subjectivity}
         return json(response)
+
+"""sent = TextClassifier()
+print(sent.trainer_sentiment("this is my best work. The man is boss, but bad fellow."))"""
