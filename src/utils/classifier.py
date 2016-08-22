@@ -45,7 +45,7 @@ class TextClassifier:
 
         for stmt in features.sentences:
             prob_dist = self._CL.prob_classify(stmt)
-            self.response.update({self._LABEL:"walmart",self._KEY_STMT:stmt, self._KEY_SENT:stmt.classify(), self._KEY_HIGH_SENT:prob_dist.max(), self._KEY_POS_SENT:round(prob_dist.prob("pos"), 2), self._KEY_NEG_SENT:round(prob_dist.prob("neg"), 2)})
+            self.response.update({self._LABEL: "walmart", self._KEY_STMT: stmt, self._KEY_SENT: stmt.classify(), self._KEY_HIGH_SENT: prob_dist.max(), self._KEY_POS_SENT: round(prob_dist.prob("pos"), 2), self._KEY_NEG_SENT: round(prob_dist.prob("neg"), 2)})
             """self.response[self._KEY_STMT] = stmt
             self.response[self._KEY_SENT] = stmt.classify()
             self.response[self._KEY_HIGH_SENT] = prob_dist.max()
@@ -79,6 +79,7 @@ class TextClassifier:
 
     def clasify_sent(self, sentence):
         self.cl.classify(sentence)
+
 
     def check_sent(self):
         print(self.cl.classify("He ain't from around here.!"))
