@@ -38,7 +38,7 @@ class TextClassifier:
 
     def check_test_data_accuracy(self):
 
-        print(self._CL.accuracy(self.TEST_DATA))
+        return self._CL.accuracy(self.TEST_DATA)
 
     def trainer_sentiment(self, sentence):
         features = TextBlob(sentence, classifier=self._CL)
@@ -55,7 +55,10 @@ class TextClassifier:
 
         return self.info
 
-
+    def check_sentiment(self, sentence):
+        status = self._CL.classify(sentence)
+        return {"result": (sentence, status)}
+    
     def load_words_list(self, filename):
         pass
 
