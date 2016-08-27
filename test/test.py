@@ -11,6 +11,7 @@ from src import utils.classifier as classify
 class DataTest(unittest.TestCase):
     def setUp(self):
         self.data_pull = pulldata.PullData()
+        self.classifier = classify.TextClassifier()
         self.config = pulldata.Config()
         self.credentials = self.config.read_config()
         self.graph_url = "https://graph.facebook.com/walmart"
@@ -57,5 +58,9 @@ class DataTest(unittest.TestCase):
     def test_read_data(self):
         result = self.data_pull.read_data(self.config.CONFIG_FILE)
         self.assertEqual(result, self.READ_CONFIG_RESULT, "data not read successfully")
+
+    def test_check_test_data_accuracy(self):
+        result = self.classifier.test_data_accuracy()
+        self.assertEqual(result, self.READ_CONFIG_RESULT, "mismatch accuracy")
 
 
