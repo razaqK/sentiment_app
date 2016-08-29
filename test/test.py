@@ -30,6 +30,14 @@ class DataTest(unittest.TestCase):
         self.POST_ID = '159616034235_10154463822269236'
         self.CONFIG_RESULT = ['bc5698075f791582c6e5fb9dbc0f144b', '2040068469550624']
         self.READ_CONFIG_RESULT = ['APP_SECRET = bc5698075f791582c6e5fb9dbc0f144b\n', 'APP_ID = 2040068469550624']
+        self.TEST_DATA = [('the beer was good.', 'pos'),
+                     ('I do not enjoy my job', 'neg'),
+                     ("I ain't feeling dandy today.", 'neg'),
+                     ("I feel amazing!", 'pos'),
+                     ('Gary is a friend of mine.', 'pos'),
+                     ("I can't believe I'm doing this.", 'neg')]
+
+        self.sentence = "the man a big boos but a bad guy"
 
     def test_create_url(self):
         result = self.data_pull.create_url(self.graph_url, self.APP_SECRET, self.APP_ID)
@@ -61,6 +69,12 @@ class DataTest(unittest.TestCase):
 
     def test_check_test_data_accuracy(self):
         result = self.classifier.test_data_accuracy()
-        self.assertEqual(result, self.READ_CONFIG_RESULT, "mismatch accuracy")
+        self.assertEqual(result, self.TEST_DATA, "mismatch accuracy")
+
+    def test_trainer_sentiment(self):
+        result = self.classifier.trainer_sentiment(self.sentence)
+        self.assertEqual(result, self.RESULT, "wrong sentence mapping")
+
+
 
 
