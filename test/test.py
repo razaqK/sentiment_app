@@ -36,7 +36,6 @@ class DataTest(unittest.TestCase):
                      ("I feel amazing!", 'pos'),
                      ('Gary is a friend of mine.', 'pos'),
                      ("I can't believe I'm doing this.", 'neg')]
-
         self.sentence = "the man a big boos but a bad guy"
 
     def test_create_url(self):
@@ -74,7 +73,3 @@ class DataTest(unittest.TestCase):
     def test_trainer_sentiment(self):
         result = self.classifier.trainer_sentiment(self.sentence)
         self.assertEqual(result, self.RESULT, "wrong sentence mapping")
-
-
-
-

@@ -62,9 +62,6 @@ class TextClassifier:
     def load_words_list(self, filename):
         pass
 
-    #def feature_words(self):
-    #    pass
-
     def extract_feature_words(self):
         pass
 
