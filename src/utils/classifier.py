@@ -36,6 +36,7 @@ class TextClassifier:
     _KEY_POS_SENT = "sentiment_pos"
     _KEY_NEG_SENT = "sentiment_neg"
 
+
     def check_test_data_accuracy(self):
 
         return self._CL.accuracy(self.TEST_DATA)
