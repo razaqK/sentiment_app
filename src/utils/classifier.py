@@ -36,9 +36,7 @@ class TextClassifier:
     _KEY_POS_SENT = "sentiment_pos"
     _KEY_NEG_SENT = "sentiment_neg"
 
-
     def check_test_data_accuracy(self):
-
         return self._CL.accuracy(self.TEST_DATA)
 
     def trainer_sentiment(self, sentence):
@@ -80,7 +78,6 @@ class TextClassifier:
 
     def clasify_sent(self, sentence):
         self.cl.classify(sentence)
-
 
     def check_sent(self):
         print(self.cl.classify("He ain't from around here.!"))
