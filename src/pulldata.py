@@ -120,7 +120,8 @@ class PullData:
         return db
 
     def add_data(self, db, data, name):
-        if len(data) > 1:
+        print(any(isinstance(i, list) for i in data))
+        if any(isinstance(i, list) for i in data):
             for i in data:
                 db.sentence.insert({name: i})
         else:
@@ -147,7 +148,6 @@ class PullData:
             self.write_file(post_data_file, json.dumps(post_data))
             comment_data = []
             for post in post_data:
-                print(post)
                 self.add_data(db, post, "post")
                 comment_url = self.create_comments_url(self.GRAPH_URL, post[0], APP_ID, APP_SECRET)
                 comments = self.get_comments_data(comment_url, comment_data, post[0])
