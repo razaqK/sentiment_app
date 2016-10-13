@@ -89,11 +89,11 @@ class PullData:
         print(comments_url)
         comments = self.render_url_to_json(comments_url)["data"]
         print(comments)
-        if len(comments)>0:
+        if len(comments) > 0:
 
             for comment in comments:
                 try:
-                    current_comments = [comment["id"], comment["message"],comment["created_time"], post_id]
+                    current_comments = [comment["id"], comment["message"], comment["created_time"], post_id]
                     comment_data.append(current_comments)
                 except Exception:
                     current_comments = ["error", "error", "error", "error", "error"]
@@ -121,7 +121,7 @@ class PullData:
 
     def add_data(self, db, data, name):
         for i in data:
-            db.sentiment.insert({name: i})
+            db.sentence.insert({name: i})
 
     def main(self):
         credentials = Config()
