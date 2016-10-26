@@ -120,7 +120,7 @@ class PullData:
         return db
 
     def add_data(self, db, data, name):
-        print(any(isinstance(i, list) for i in data))
+        #print(any(isinstance(i, list) for i in data))
         if any(isinstance(i, list) for i in data):
             for i in data:
                 db.sentence.insert({name: i})
