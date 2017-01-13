@@ -91,5 +91,7 @@ class TextClassifier:
         response = {'polarity': text.polarity, 'subjectivity': text.subjectivity}
         return json(response)
 
+    def check_test(self):
+        pass
 """sent = TextClassifier()
 print(sent.trainer_sentiment("this is my best work. The man is boss, but bad fellow."))"""
